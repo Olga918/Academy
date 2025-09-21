@@ -13,7 +13,6 @@ namespace СвязьМеждуТаблицами.Model
         public int Year { get; set; }
         public int DepartmentId { get; set; }
         public Department Department { get; set; }
-        public ICollection<Student> Students { get; set; } = new List<Student>();
         public ICollection<GroupsStudents> GroupsStudents { get; set; } = new List<GroupsStudents>();
         public ICollection<GroupsLectures> GroupsLectures { get; set; } = new List<GroupsLectures>();
         public ICollection<GroupsCurators> GroupsCurators { get; set; } = new List<GroupsCurators>();

@@ -20,20 +20,24 @@ namespace СвязьМеждуТаблицами.ContextConfig
         public DbSet<GroupsStudents> GroupsStudents { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Lecture> Lectures { get; set; }
-        public DbSet<SubJect> Subjects { get; set; }
+        public DbSet<Subject> Subjects { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
 
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=COSMOS\\SQLEXPRESS;Database=AcademyOfCommucationsDB;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer("Server=COSMOS\\SQLEXPRESS;Database=AcademyEFDB;Trusted_Connection=True;TrustServerCertificate=true;");
         }
 
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            //1 способ задания конфигурации через Fluent API
+
+
             //modelBuilder.Entity<Curator>(entity =>
             //{
             //    entity.HasKey(c => c.Id);
@@ -42,8 +46,21 @@ namespace СвязьМеждуТаблицами.ContextConfig
             //    entity.Property(c => c.Surname).IsRequired().HasMaxLength(100);
             //});
 
+            //"2 способ задания конфигурации через отдельные классы конфигурации"
+
             modelBuilder.ApplyConfiguration(new CuratorConfig());
             modelBuilder.ApplyConfiguration(new DepartmentConfig());
+            modelBuilder.ApplyConfiguration(new FacultyConfig());
+            modelBuilder.ApplyConfiguration(new GroupConfig());
+            modelBuilder.ApplyConfiguration(new GroupsCuratorsConfig());
+
+            modelBuilder.ApplyConfiguration(new GroupsLecturesConfig());
+            modelBuilder.ApplyConfiguration(new GroupsStudentsConfig());
+            modelBuilder.ApplyConfiguration(new LectureConfig());
+            modelBuilder.ApplyConfiguration(new StudentConfig());
+            modelBuilder.ApplyConfiguration(new SubjectConfig());
+            modelBuilder.ApplyConfiguration(new TeacherConfig());
+
 
             //modelBuilder.Entity<Department>(entity =>
             //{
@@ -59,167 +76,165 @@ namespace СвязьМеждуТаблицами.ContextConfig
 
             //});
 
-            modelBuilder.Entity<Faculty>(entity =>
-            {
-                entity.HasKey(f => f.Id);
-                entity.Property(f => f.Id).ValueGeneratedOnAdd();
-                entity.Property(f => f.Name).IsRequired().HasMaxLength(100);
-                entity.HasIndex(f => f.Name).IsUnique();
-            });
+            //modelBuilder.Entity<Faculty>(entity =>
+            //{
+            //    entity.HasKey(f => f.Id);
+            //    entity.Property(f => f.Id).ValueGeneratedOnAdd();
+            //    entity.Property(f => f.Name).IsRequired().HasMaxLength(100);
+            //    entity.HasIndex(f => f.Name).IsUnique();
+            //});
 
-            modelBuilder.Entity<Group>(entity =>
-            {
-                entity.HasKey(g => g.Id);
-                entity.Property(g => g.Id).ValueGeneratedOnAdd();
-                entity.Property(g => g.Name).IsRequired().HasMaxLength(10);
-                entity.HasIndex(f => f.Name).IsUnique();
-                entity.Property(g => g.Year).IsRequired();
-                entity.HasCheckConstraint("CK_Group_Year", "Year >= 1 AND Year <= 5");
-                entity.HasOne(g => g.Department)
-                      .WithMany(d => d.Groups)
-                      .HasForeignKey(g => g.DepartmentId)
-                      .OnDelete(DeleteBehavior.Cascade);
+            //modelBuilder.Entity<Group>(entity =>
+            //{
+            //    entity.HasKey(g => g.Id);
+            //    entity.Property(g => g.Id).ValueGeneratedOnAdd();
+            //    entity.Property(g => g.Name).IsRequired().HasMaxLength(10);
+            //    entity.HasIndex(f => f.Name).IsUnique();
+            //    entity.Property(g => g.Year).IsRequired();
+            //    entity.HasCheckConstraint("CK_Group_Year", "Year >= 1 AND Year <= 5");
+            //    entity.HasOne(g => g.Department)
+            //          .WithMany(d => d.Groups)
+            //          .HasForeignKey(g => g.DepartmentId)
+            //          .OnDelete(DeleteBehavior.Cascade);
 
-            });
+            //});
 
-            modelBuilder.Entity<GroupsCurators>(entity =>
-            {
-                entity.HasKey(gc => gc.Id);
-                entity.Property(gc => gc.Id)
-                      .ValueGeneratedOnAdd();
+            //modelBuilder.Entity<GroupsCurators>(entity =>
+            //{
+            //    entity.HasKey(gc => gc.Id);
+            //    entity.Property(gc => gc.Id)
+            //          .ValueGeneratedOnAdd();
 
-                entity.HasOne(gc => gc.Curator)
-                      .WithMany(c => c.GroupsCurators)
-                      .HasForeignKey(gc => gc.CuratorId)
-                      .IsRequired();
-                entity.HasOne(gc => gc.Group)
-                      .WithMany(g => g.GroupsCurators)
-                      .HasForeignKey(gc => gc.GroupId)
-                      .IsRequired();
-            });
+            //    entity.HasOne(gc => gc.Curator)
+            //          .WithMany(c => c.GroupsCurators)
+            //          .HasForeignKey(gc => gc.CuratorId)
+            //          .IsRequired();
+            //    entity.HasOne(gc => gc.Group)
+            //          .WithMany(g => g.GroupsCurators)
+            //          .HasForeignKey(gc => gc.GroupId)
+            //          .IsRequired();
+            //});
 
-            modelBuilder.Entity<GroupsLectures>(entity =>
-            {
-                entity.HasKey(gl => gl.Id);
-                entity.Property(gl => gl.Id).ValueGeneratedOnAdd();
+            //modelBuilder.Entity<GroupsLectures>(entity =>
+            //{
+            //    entity.HasKey(gl => gl.Id);
+            //    entity.Property(gl => gl.Id).ValueGeneratedOnAdd();
 
-                entity.HasOne(gl => gl.Group)
-                      .WithMany(g => g.GroupsLectures)
-                      .HasForeignKey(gl => gl.GroupId)
-                      .IsRequired();
+            //    entity.HasOne(gl => gl.Group)
+            //          .WithMany(g => g.GroupsLectures)
+            //          .HasForeignKey(gl => gl.GroupId)
+            //          .IsRequired();
 
-                entity.HasOne(gl => gl.Lecture)
-                      .WithMany(l => l.GroupsLectures)
-                      .HasForeignKey(gl => gl.LectureId)
-                      .IsRequired();
-            });
+            //    entity.HasOne(gl => gl.Lecture)
+            //          .WithMany(l => l.GroupsLectures)
+            //          .HasForeignKey(gl => gl.LectureId)
+            //          .IsRequired();
+            //});
 
-            modelBuilder.Entity<GroupsStudents>(entity =>
-            {
-                entity.HasKey(gs => gs.Id);
-                entity.Property(gs => gs.Id).ValueGeneratedOnAdd();
+            //modelBuilder.Entity<GroupsStudents>(entity =>
+            //{
+            //    entity.HasKey(gs => gs.Id);
+            //    entity.Property(gs => gs.Id).ValueGeneratedOnAdd();
 
-                entity.HasOne(gs => gs.Group)
-                      .WithMany(g => g.GroupsStudents)
-                      .HasForeignKey(gs => gs.GroupId)
-                      .IsRequired();
+            //    entity.HasOne(gs => gs.Group)
+            //          .WithMany(g => g.GroupsStudents)
+            //          .HasForeignKey(gs => gs.GroupId)
+            //          .IsRequired();
 
-                entity.HasOne(gs => gs.Student)
-                      .WithMany(s => s.GroupsStudents)
-                      .HasForeignKey(gs => gs.StudentId)
-                      .IsRequired();
-            });
+            //    entity.HasOne(gs => gs.Student)
+            //          .WithMany(s => s.GroupsStudents)
+            //          .HasForeignKey(gs => gs.StudentId)
+            //          .IsRequired();
+            //});
 
-            modelBuilder.Entity<Lecture>(entity =>
-            {
-               
-                entity.HasKey(l => l.Id);
 
-                entity.Property(l => l.Id)
-                      .ValueGeneratedOnAdd();
+            //modelBuilder.Entity<Lecture>(entity =>
+            //{
 
-                entity.Property(l => l.Date)
-                      .IsRequired();
-                entity.HasCheckConstraint("CK_Lecture_Date", "[Date] <= GETDATE()");
+            //    entity.HasKey(l => l.Id);
 
-                entity.HasOne(l => l.Subject)
-                      .WithMany(s => s.Lectures)
-                      .HasForeignKey(l => l.SubjectId)
-                      .IsRequired();
+            //    entity.Property(l => l.Id)
+            //          .ValueGeneratedOnAdd();
 
-                entity.HasOne(l => l.Teacher)
-                      .WithMany(t => t.Lectures)
-                      .HasForeignKey(l => l.TeacherId)
-                      .IsRequired();
-            });
+            //    entity.Property(l => l.Date)
+            //          .IsRequired();
+            //    entity.HasCheckConstraint("CK_Lecture_Date", "[Date] <= GETDATE()");
 
-            modelBuilder.Entity<Student>(entity =>
-            {
-                entity.HasKey(s => s.Id);
-                entity.Property(s => s.Id).ValueGeneratedOnAdd();
+            //    entity.HasOne(l => l.Subject)
+            //          .WithMany(s => s.Lectures)
+            //          .HasForeignKey(l => l.SubjectId)
+            //          .IsRequired();
 
-                entity.Property(s => s.Name)
-                      .IsRequired()
-                      .HasColumnType("nvarchar(max)");
+            //    entity.HasOne(l => l.Teacher)
+            //          .WithMany(t => t.Lectures)
+            //          .HasForeignKey(l => l.TeacherId)
+            //          .IsRequired();
+            //});
 
-                entity.Property(s => s.Surname)
-                      .IsRequired()
-                     .HasColumnType("nvarchar(max)");
+            //modelBuilder.Entity<Student>(entity =>
+            //{
+            //    entity.HasKey(s => s.Id);
+            //    entity.Property(s => s.Id).ValueGeneratedOnAdd();
 
-                entity.Property(s => s.Rating)
-                      .IsRequired();
-                entity.HasCheckConstraint("CK_Student_Rating", "[Rating] >= 0 AND [Rating] <= 5");
+            //    entity.Property(s => s.Name)
+            //          .IsRequired()
+            //          .HasColumnType("nvarchar(max)");
 
-                entity.HasOne(s => s.Group)
-                      .WithMany(g => g.Students)
-                      .HasForeignKey(s => s.GroupId)
-                      .IsRequired();
-            });
+            //    entity.Property(s => s.Surname)
+            //          .IsRequired()
+            //         .HasColumnType("nvarchar(max)");
 
-            modelBuilder.Entity<SubJect>(entity =>
-            {
-                entity.HasKey(s => s.Id);
+            //    entity.Property(s => s.Rating)
+            //          .IsRequired();
+            //    entity.HasCheckConstraint("CK_Student_Rating", "[Rating] >= 0 AND [Rating] <= 5");
 
-                entity.Property(s => s.Id)
-                      .ValueGeneratedOnAdd();
 
-                entity.Property(s => s.Name)
-                      .IsRequired()
-                      .HasMaxLength(100);
+            //});
 
-                entity.HasIndex(s => s.Name)
-                      .IsUnique();
-            });
+            //modelBuilder.Entity<Subject>(entity =>
+            //{
+            //    entity.HasKey(s => s.Id);
 
-            modelBuilder.Entity<Teacher>(entity =>
-            {
-                // Первичный ключ
-                entity.HasKey(t => t.Id);
+            //    entity.Property(s => s.Id)
+            //          .ValueGeneratedOnAdd();
 
-                // Id — автоприрост
-                entity.Property(t => t.Id)
-                      .ValueGeneratedOnAdd();
+            //    entity.Property(s => s.Name)
+            //          .IsRequired()
+            //          .HasMaxLength(100);
 
-                // IsProfessor — BIT, NOT NULL, default false
-                entity.Property(t => t.isProfessor)
-                      .IsRequired()
-                      .HasDefaultValue(false);
+            //    entity.HasIndex(s => s.Name)
+            //          .IsUnique();
+            //});
 
-                // Name — nvarchar(max), NOT NULL
-                entity.Property(t => t.Name)
-                      .IsRequired()
-                      .HasColumnType("nvarchar(max)");
+            //modelBuilder.Entity<Teacher>(entity =>
+            //{
+            //    // Первичный ключ
+            //    entity.HasKey(t => t.Id);
 
-                // Surname — nvarchar(max), NOT NULL
-                entity.Property(t => t.Surname)
-                      .IsRequired()
-                      .HasColumnType("nvarchar(max)");
+            //    // Id — автоприрост
+            //    entity.Property(t => t.Id)
+            //          .ValueGeneratedOnAdd();
 
-                // Salary — int, NOT NULL, > 0
-                entity.Property(t => t.Salary)
-                      .IsRequired();
-                entity.HasCheckConstraint("CK_Teacher_Salary", "[Salary] > 0");
-            });
+            //    // IsProfessor — BIT, NOT NULL, default false
+            //    entity.Property(t => t.isProfessor)
+            //          .IsRequired()
+            //          .HasDefaultValue(false);
+
+            //    // Name — nvarchar(max), NOT NULL
+            //    entity.Property(t => t.Name)
+            //          .IsRequired()
+            //          .HasColumnType("nvarchar(max)");
+
+            //    // Surname — nvarchar(max), NOT NULL
+            //    entity.Property(t => t.Surname)
+            //          .IsRequired()
+            //          .HasColumnType("nvarchar(max)");
+
+            //    // Salary — int, NOT NULL, > 0
+            //    entity.Property(t => t.Salary)
+            //          .IsRequired();
+            //    entity.HasCheckConstraint("CK_Teacher_Salary", "[Salary] > 0");
+            //});
 
 
 

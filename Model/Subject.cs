@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace СвязьМеждуТаблицами.Model
 {
-    public class SubJect
+    public class Subject
     {
         public int Id { get; set; }
         public string Name { get; set; }
