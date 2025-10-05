@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace СвязьМеждуТаблицами.Migrations
+namespace ExamAcademy.Migrations
 {
     /// <inheritdoc />
     public partial class InitialConfig : Migration

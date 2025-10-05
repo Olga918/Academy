@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace СвязьМеждуТаблицами.Migrations
+namespace ExamAcademy.Migrations
 {
     /// <inheritdoc />
     public partial class First : Migration

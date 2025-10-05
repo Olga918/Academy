@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using СвязьМеждуТаблицами.ContextConfig;
+using ExamAcademy.ContextConfig;
 
 #nullable disable
 
-namespace СвязьМеждуТаблицами.Migrations
+namespace ExamAcademy.Migrations
 {
     [DbContext(typeof(AcademyContext))]
     [Migration("20250921093006_InitialConfig")]
