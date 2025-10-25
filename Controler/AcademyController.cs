@@ -104,7 +104,7 @@ namespace ExamAcademy.Controller
             var newDepartment = new Department
             {
                 Name = "Департамент тестирования",
-                Financing = "Бюджет",
+                Financing = 2,
                 Building =5,
                 FacultyId = 50
             };
@@ -115,11 +115,11 @@ namespace ExamAcademy.Controller
 
             var departments = new List<Department>
             {
-                new Department { Name = "Департамент программирования", Financing = "Бюджет", Building = 1, FacultyId = facultyRepo.GetIdByName("Факультет бизнеса") },
-                new Department { Name = "Департамент дизайна", Financing = "Бюджет", Building = 4, FacultyId =facultyRepo.GetIdByName("Факультет биологии")  },
-                new Department { Name = "Департамент маркетинга", Financing = "Бюджет", Building = 3, FacultyId = 44 },
-                new Department { Name = "Департамент продаж", Financing = "Бюджет", Building = 4, FacultyId = 49 },
-                new Department { Name = "Департамент поддержки", Financing = "Бюджет", Building = 2, FacultyId = 51 }
+                new Department { Name = "Департамент программирования", Financing = 4000, Building = 1, FacultyId = facultyRepo.GetIdByName("Факультет бизнеса") },
+                new Department { Name = "Департамент дизайна", Financing = 4500, Building = 4, FacultyId =facultyRepo.GetIdByName("Факультет биологии")  },
+                new Department { Name = "Департамент маркетинга", Financing = 1400, Building = 3, FacultyId = 44 },
+                new Department { Name = "Департамент продаж", Financing = 5050, Building = 4, FacultyId = 49 },
+                new Department { Name = "Департамент поддержки", Financing = 3000, Building = 2, FacultyId = 51 }
     };
 
             // Добавляем новые департаменты в базу
@@ -342,6 +342,19 @@ namespace ExamAcademy.Controller
 
                        
 
+            //var lectures = new List<Lecture>
+            //{
+            //    new Lecture { Date = DateTime.Now, SubjectId = 10, TeacherId = 7 },
+            //    new Lecture { Date = DateTime.Now, SubjectId = 11, TeacherId = 8 },
+            //    new Lecture { Date = DateTime.Now, SubjectId = 3, TeacherId = 9 },
+            //    new Lecture { Date = DateTime.Now, SubjectId = 4, TeacherId = 10 }
+            //};
+            //// Добавляем новые лекции в базу
+            //foreach (var l in lectures)
+            //{
+            //    lectureRepo.Insert(l);
+            //    Console.WriteLine($"Добавлена лекция: {l.Date} для предмета {l.SubjectId} и преподавателя {l.TeacherId}");
+            //}
             var lectures = new List<Lecture>
             {
                 new Lecture { Date = DateTime.Now, SubjectId = 10, TeacherId = 7 },

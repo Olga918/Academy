@@ -10,7 +10,7 @@ namespace ExamAcademy.Model
     {
         public int Id { get; set; }
         public int Building { get; set; }
-        public string Financing { get; set; }
+        public double Financing { get; set; }
         public string Name { get; set; }
         public int FacultyId { get; set; }
         public Faculty Faculty { get; set; }
